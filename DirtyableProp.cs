@@ -15,7 +15,7 @@ namespace SkyTrack.LaborSetup.Models
         private bool _isDirty = false;
         private bool _isInvalid = false;
         private T _value;
-        public Action<object, PropertyChangedEventArgs> Handler;
+        private Action<object, PropertyChangedEventArgs> Handler;
 
         public DirtyableProp(Action<object, PropertyChangedEventArgs> handler = null) {
             if (handler != null)
@@ -56,6 +56,12 @@ namespace SkyTrack.LaborSetup.Models
                 _isInvalid = value;
                 OnPropertyChanged();
             }
+        }
+
+        public void SetHandler(Action<object, PropertyChangedEventArgs> handler)
+        {
+            Handler = handler;
+            (this as INotifyPropertyChanged).PropertyChanged += new PropertyChangedEventHandler(Handler);
         }
 
         public object Clone()
